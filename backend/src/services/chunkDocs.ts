@@ -8,16 +8,8 @@ import {
     RecursiveCharacterTextSplitter,
 } from 'langchain/text_splitter'
 
-
-
-
-
-export const chunkDocs = async () => {
-    let directoryPath = 'chunkUploads';
+export const chunkDocs = async (directoryPath: string = 'chunkUploads') => {
     let docs: any = [];
-
-
-
     try {
         const directoryLoader = new DirectoryLoader(directoryPath, {
             '.pdf': (filePath) => new PDFLoader(filePath),
@@ -36,7 +28,7 @@ export const chunkDocs = async () => {
     }
     catch (error) {
         console.log("An error has been occured:::", error);
-        
+
 
     }
 }
