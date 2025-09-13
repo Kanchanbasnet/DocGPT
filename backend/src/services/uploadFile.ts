@@ -11,20 +11,32 @@ const storage = multer.diskStorage({
 })
 
 function allowedFileType(file: any, cb: any) {
-    const filetypes = /pdf|docx|ppt|txt/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
+    const allowedExtensions = /pdf|docx|pptx|txt/; 
+    const allowedMimeTypes = [
+        'application/pdf',                                                               
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',     
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation', 
+        'text/plain'                                                                     
+    ];
+
+    const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedMimeTypes.includes(file.mimetype);
+    
+    console.log("File type:::", file.mimetype);
+    console.log("Ext name::::", path.extname(file.originalname).toLowerCase());
+    console.log("Extension valid:", extname);
+    console.log("MIME type valid:", mimetype);
 
     if (mimetype && extname) {
         return cb(null, true);
     } else {
-        cb('Error: Files only! (pdf, docx, ppt, txt)');
+        cb(new Error('Only PDF, DOCX, PPTX, and TXT files are allowed!'));
     }
 }
 
-const upload = multer({
+export const upload = multer({
     storage: storage,
-    limits: { fileSize: 1000000, files: 5 },
+    limits: {  files: 5 },
     fileFilter: function (req, file, cb) {
         allowedFileType(file, cb);
     }

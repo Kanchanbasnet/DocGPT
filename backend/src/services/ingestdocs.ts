@@ -44,7 +44,7 @@ export const ingestDocs = async (userId: string, files: Express.Multer.File[]) =
             }
         ))
         const indexName = `UserDocs_${userId.replace(/[^a-zA-Z0-9]/g, '_')}`;
-        console.log(`📊 Using vector index: ${indexName}`);
+        console.log(`Using vector index: ${indexName}`);
 
         await WeaviateStore.fromDocuments(
             metadata,
