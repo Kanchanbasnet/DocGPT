@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import DataSource from "../models/dataSource/dataSource.model";
-import { error } from "console";
 
 
 
@@ -9,7 +8,7 @@ export const uploadDataSource = async (req: Request, res: Response) => {
         const { userId } = req.body;
         const files = req.files as Express.Multer.File[];
         if (!files || files.length === 0) {
-            return res.status(400).json({ message: "No files uploaded"});
+            return res.status(400).json({ message: "No files uploaded" });
         }
         if (files && files.length > 5) {
             return res.status(400).json({ message: "Maximum 5 files are allowed" });
@@ -28,7 +27,6 @@ export const uploadDataSource = async (req: Request, res: Response) => {
                 fileType: file.mimetype,
                 filePath: file.path,
                 fileMetaData: metaData,
-                status: 'processing'
             })
         }
         return res.status(200).json({ message: "Files Uploaded Successfully" });

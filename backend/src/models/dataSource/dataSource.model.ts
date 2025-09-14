@@ -6,7 +6,6 @@ export interface IDataSource extends mongoose.Document {
     fileName: string;
     fileType: string;
     filePath: string;
-    status: 'ready' | 'processing' | 'failed',
     fileMetaData: Record<string, any>;
 
 }
@@ -27,11 +26,6 @@ const schema = new mongoose.Schema<IDataSource>({
     filePath: {
         type: String,
         required: true
-    },
-    status: {
-        type: String,
-        enum: ['ready', 'processing', 'failed'],
-        default: 'processing'
     },
     fileMetaData: {
         type: mongoose.Schema.Types.Mixed,
