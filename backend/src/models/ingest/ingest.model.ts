@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 
 export interface IDataIngest {
     userId: mongoose.Types.ObjectId,
-    dataIngestName: string,
-    dataIngestIdentifier: string,
+    name: string,
+    identifier: string,
     dataSourceIds: Array<mongoose.Types.ObjectId>
     status: 'processing' | 'completed' | 'failed'
 }
@@ -16,11 +16,11 @@ const schema = new mongoose.Schema<IDataIngest>({
         ref: "User",
         required: true
     },
-    dataIngestName: {
+    name: {
         type: String,
         required: true
     },
-    dataIngestIdentifier: {
+    identifier: {
         type: String,
         required: true
     },
