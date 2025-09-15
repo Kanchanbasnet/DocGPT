@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import User from "../models/users/user.model";
 import DataIngest from "../models/ingest/ingest.model";
-import connection from "../config/redis.connection";
+// import connection from "../config/redis.connection";
+import { processIngestion } from "../services/ingestdocs";
+import DataSource from "../models/dataSource/dataSource.model";
 
 
 async function generateIdentifier(identifer: string) {
@@ -10,7 +12,7 @@ async function generateIdentifier(identifer: string) {
     return uniqueIdentifier;
 
 }
-const client = connection;
+// const client = connection;
 
 
 export const getAllIngest = async (req: Request, res: Response) => {
@@ -75,6 +77,14 @@ export const createIngest = async (req: Request, res: Response) => {
         if (!dataSourceIds && dataSourceIds.length === 0) {
             return res.status(400).json({ error: "Please provide at least one datasource." })
         }
+        const dataSources = await DataSource.find({
+              _id: { $in: dataSourceIds },
+            userId: userId
+        })
+        console.log("DataSources:::", dataSources)
+        if(dataSources.length === 0){
+            return res.status(400).json({message: "DataSource not found."})
+        }
         const uniqueIdentifier = await generateIdentifier(name);
         const ingest = await DataIngest.create({
             userId: userId,
@@ -83,6 +93,7 @@ export const createIngest = async (req: Request, res: Response) => {
             dataSourceIds: dataSourceIds,
             status: 'processing'
          })
+         processIngestion(ingest._id.toString(), dataSources, userId)
         //  await client.set(`ingest:${ingest.id}`, 'processing');
         return res.status(200).json({ message: "Ingest created Successfully." })
          } catch (error) {

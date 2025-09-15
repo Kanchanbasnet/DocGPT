@@ -11,6 +11,7 @@ import {
 export const chunkDocs = async (directoryPath: string = 'chunkUploads') => {
     let docs: any = [];
     try {
+        console.log("directoryPath:::", directoryPath);
         const directoryLoader = new DirectoryLoader(directoryPath, {
             '.pdf': (filePath) => new PDFLoader(filePath),
             '.docx': (filePath) => new DocxLoader(filePath),
@@ -18,6 +19,7 @@ export const chunkDocs = async (directoryPath: string = 'chunkUploads') => {
             '.txt': (filePath) => new TextLoader(filePath)
         })
         const rawDocs = await directoryLoader.load();
+        console.log("RawDocs:::", rawDocs)
         const textSplitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
             chunkOverlap: 200

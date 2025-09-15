@@ -22,9 +22,11 @@
     "ioredis": "^5.7.0",
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.3.32",
+    "mammoth": "^1.10.0",
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
     "node-cron": "^4.2.1",
+    "officeparser": "^4.2.0",
     "pdf-parse": "^1.1.1",
     "ts-node": "^10.9.2",
     "weaviate-client": "^3.8.1"
