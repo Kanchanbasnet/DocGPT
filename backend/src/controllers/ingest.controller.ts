@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/users/user.model";
 import DataIngest from "../models/ingest/ingest.model";
-// import connection from "../config/redis.connection";
 import { processIngestion } from "../services/ingestdocs";
 import DataSource from "../models/dataSource/dataSource.model";
 
@@ -12,7 +11,6 @@ async function generateIdentifier(identifer: string) {
     return uniqueIdentifier;
 
 }
-// const client = connection;
 
 
 export const getAllIngest = async (req: Request, res: Response) => {
@@ -81,7 +79,6 @@ export const createIngest = async (req: Request, res: Response) => {
               _id: { $in: dataSourceIds },
             userId: userId
         })
-        console.log("DataSources:::", dataSources)
         if(dataSources.length === 0){
             return res.status(400).json({message: "DataSource not found."})
         }
@@ -94,7 +91,6 @@ export const createIngest = async (req: Request, res: Response) => {
             status: 'processing'
          })
          processIngestion(ingest._id.toString(), dataSources, userId)
-        //  await client.set(`ingest:${ingest.id}`, 'processing');
         return res.status(200).json({ message: "Ingest created Successfully." })
          } catch (error) {
         console.error("Error in creating new ingest::::", error);
@@ -102,6 +98,22 @@ export const createIngest = async (req: Request, res: Response) => {
 
     }
 
+}
+
+export const deleteIngestById = async(req: Request, res: Response)=>{
+    try{
+        const {id} = req.params;
+        if(!id){
+            return res.status(400).json({error: "IngestId is missing"})
+        }
+        await DataIngest.findByIdAndDelete(id);
+        return res.status(200).json({message: "Ingest deleted Successfully."});
+
+    }catch(error){
+        console.error("Error in deleting ingest", error);
+        return res.status(500).json({message: "Internal Server Error."})
+
+    }
 }
 
 export const getIngestStatus = async (req: Request, res: Response)=>{
