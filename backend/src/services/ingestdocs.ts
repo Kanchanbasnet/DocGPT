@@ -7,10 +7,6 @@ import { WeaviateStore } from '@langchain/weaviate';
 import DataIngest from "../models/ingest/ingest.model";
 
 
-
-
-
-
 export const ingestDocs = async (userId: string, dataSources: any, ingestId: string) => {
     try {
         const embeddings = new OpenAIEmbeddings({
